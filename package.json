@@ -1,0 +1,13 @@
+{
+  "name": "stock-market-tracker-bot",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": ".\\.venv\\Scripts\\python.exe webapp/kucoin_fee_calculator.py",
+    "tracker": ".\\.venv\\Scripts\\python.exe stock_tracker/app.py",
+    "bot": ".\\.venv\\Scripts\\python.exe discord_bot/bot.py",
+    "bitvavo": ".\\.venv\\Scripts\\python.exe webapp/bitvavo_fee_calculator.py",
+    "degiro": ".\\.venv\\Scripts\\python.exe webapp/degiro_fee_calculator.py",
+    "test": ".\\.venv\\Scripts\\python.exe -m pytest"
+  }
+}

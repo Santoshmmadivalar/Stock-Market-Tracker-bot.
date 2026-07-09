@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex Portfolio Stock Tracker | Outpro.India FinTech</title>
+  <!-- Google Fonts Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- TradingView Lightweight Charts CDN locked to v4 to guarantee compatibility -->
+  <script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
+  
+  <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+
+  <!-- App Header Banner -->
+  <header class="app-header">
+    <div class="logo-section">
+      <i data-lucide="trending-up" size="24"></i>
+      <span>APEX STOCK TRACKER</span>
+    </div>
+    
+    <!-- Real-time Index tape -->
+    <div class="market-ticker-tape" id="market-tape">
+      <div class="ticker-item">
+        <span class="ticker-name">S&P 500</span>
+        <span class="ticker-value">--</span>
+        <span class="ticker-change change-up">--</span>
+      </div>
+      <div class="ticker-item">
+        <span class="ticker-name">NASDAQ</span>
+        <span class="ticker-value">--</span>
+        <span class="ticker-change change-up">--</span>
+      </div>
+      <div class="ticker-item">
+        <span class="ticker-name">DOW JONES</span>
+        <span class="ticker-value">--</span>
+        <span class="ticker-change change-up">--</span>
+      </div>
+    </div>
+    
+    <div class="market-status-badge open" id="market-status-container">
+      <span class="market-status-dot"></span>
+      <span id="market-status-text">MARKET OPEN</span>
+    </div>
+  </header>
+
+  <!-- App Body Layout -->
+  <div class="app-container">
+    <!-- Sidebar navigation & watchlist -->
+    <aside class="app-sidebar">
+      <nav class="nav-menu">
+        <a class="nav-item active" id="btn-nav-dashboard">
+          <i data-lucide="layout-dashboard" size="18"></i>
+          <span>Dashboard</span>
+        </a>
+        <a class="nav-item" id="btn-nav-portfolio">
+          <i data-lucide="briefcase" size="18"></i>
+          <span>My Holdings</span>
+        </a>
+        <a class="nav-item" id="btn-nav-history">
+          <i data-lucide="history" size="18"></i>
+          <span>Trade Ledger</span>
+        </a>
+      </nav>
+      
+      <!-- Live watchlist sidebar -->
+      <div class="sidebar-watchlist-section">
+        <div class="section-title">My Watchlist</div>
+        <div class="watchlist-items" id="watchlist-container">
+          <!-- Populated dynamically -->
+          <div class="watchlist-item">
+            <div class="watchlist-item-left">
+              <span class="watchlist-ticker">AAPL</span>
+              <span class="watchlist-name">Apple Inc.</span>
+            </div>
+            <div class="watchlist-item-right">
+              <span class="watchlist-price">$--</span>
+              <span class="change-up">--%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Dynamic Content -->
+    <main class="app-content" id="dashboard-view">
+      <!-- Summary metrics row -->
+      <section class="summary-grid">
+        <div class="summary-card">
+          <span class="card-title">Portfolio Valuation</span>
+          <span class="card-value" id="val-portfolio">$--</span>
+          <div class="card-footer" id="val-pnl-overall">
+            <span class="change-up">-- (--%)</span>
+            <span style="color: var(--text-muted); font-weight: normal; margin-left: 2px;">Overall PnL</span>
+          </div>
+        </div>
+        <div class="summary-card">
+          <span class="card-title">Today's P&L</span>
+          <span class="card-value" id="val-todays-pnl">$--</span>
+          <div class="card-footer" id="val-pnl-today-pct">
+            <span class="change-up">--%</span>
+            <span style="color: var(--text-muted); font-weight: normal; margin-left: 2px;">Today</span>
+          </div>
+        </div>
+        <div class="summary-card">
+          <span class="card-title">Assets Investment</span>
+          <span class="card-value" id="val-total-investment">$--</span>
+          <div class="card-footer" style="color: var(--text-secondary);" id="val-holdings-count">
+            <span>-- Holdings</span>
+          </div>
+        </div>
+        <div class="summary-card">
+          <span class="card-title">Cash Reserve</span>
+          <span class="card-value" id="val-cash-balance">$--</span>
+          <div class="card-footer" style="color: var(--text-secondary);" id="val-cash-pct">
+            <span>--% of portfolio</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Graphic Chart & Transaction execution split -->
+      <section class="mid-split">
+        <!-- Live chart panel -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="stock-info-main">
+              <div class="stock-title-section">
+                <span class="stock-symbol" id="chart-symbol">AAPL</span>
+                <span class="stock-name-long" id="chart-stock-name">Apple Inc.</span>
+              </div>
+              <div class="stock-price-section">
+                <span class="stock-live-price" id="chart-price">$--</span>
+                <span class="ticker-change change-up" id="chart-change">-- (--%)</span>
+              </div>
+            </div>
+            
+            <div class="chart-controls">
+              <button class="chart-btn" data-range="1d">1D</button>
+              <button class="chart-btn" data-range="5d">5D</button>
+              <button class="chart-btn active" data-range="1m">1M</button>
+              <button class="chart-btn" data-range="3m">3M</button>
+              <button class="chart-btn" data-range="1y">1Y</button>
+            </div>
+          </div>
+          
+          <div class="chart-container" id="candlestick-chart-box">
+            <!-- Lightweight-charts mounts here -->
+          </div>
+        </div>
+
+        <!-- Purchase & Sale Panel -->
+        <div class="trade-card">
+          <div>
+            <h3 class="card-subtitle" style="margin-bottom: 15px;">Execute Order</h3>
+            <div class="trade-toggle">
+              <button class="trade-toggle-btn active-buy" id="btn-toggle-buy">BUY</button>
+              <button class="trade-toggle-btn" id="btn-toggle-sell">SELL</button>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Ticker Symbol</label>
+              <input type="text" class="form-input" id="trade-input-ticker" value="AAPL" placeholder="e.g. AAPL">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Number of Shares</label>
+              <input type="number" class="form-input" id="trade-input-shares" min="0.001" step="any" value="10" placeholder="0.00">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Order Notes</label>
+              <input type="text" class="form-input" id="trade-input-notes" placeholder="Buy and hold...">
+            </div>
+          </div>
+          
+          <div>
+            <div class="trade-summary-info">
+              <div class="info-row">
+                <span class="info-label">Execution Price</span>
+                <span class="info-value" id="trade-exec-price">$--</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Estimated Value</span>
+                <span class="info-value" id="trade-est-cost">$--</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Cash Remaining</span>
+                <span class="info-value" id="trade-remaining-cash">$--</span>
+              </div>
+            </div>
+            
+            <button class="btn-execute btn-buy" id="btn-execute-trade">EXECUTE BUY ORDER</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Portfolio Holdings Table & Allocations breakdown -->
+      <section class="bottom-split">
+        <!-- Holdings list -->
+        <div class="holdings-card">
+          <div class="card-header-actions">
+            <span class="card-subtitle">Active Holdings</span>
+            <button class="table-action-btn" id="btn-refresh-holdings">
+              <i data-lucide="refresh-cw" size="14"></i>
+            </button>
+          </div>
+          
+          <div class="table-responsive">
+            <table class="tracker-table">
+              <thead>
+                <tr>
+                  <th>Asset</th>
+                  <th>Company</th>
+                  <th>Shares</th>
+                  <th>Avg Price</th>
+                  <th>Live Price</th>
+                  <th>Value</th>
+                  <th>Overall P&L</th>
+                  <th>Today P&L</th>
+                  <th>Trade</th>
+                </tr>
+              </thead>
+              <tbody id="holdings-table-body">
+                <!-- Dynamically Populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Allocation card -->
+        <div class="allocation-card">
+          <span class="card-subtitle">Asset Allocations</span>
+          <div class="allocation-chart-wrapper">
+            <canvas id="allocation-pie-chart"></canvas>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Gainers, Losers, and Ledger View (hidden by default) -->
+      <section class="watchlist-tab-grid">
+        <!-- Top Gainers -->
+        <div class="holdings-card">
+          <span class="card-subtitle" style="color: var(--color-up)">Top Gainers</span>
+          <div class="mini-card-list" id="gainers-container">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+        
+        <!-- Top Losers -->
+        <div class="holdings-card">
+          <span class="card-subtitle" style="color: var(--color-down)">Top Losers</span>
+          <div class="mini-card-list" id="losers-container">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Holdings Ledger View (displayed dynamically) -->
+    <main class="app-content" id="holdings-view" style="display: none;">
+      <div class="holdings-card">
+        <h3 class="card-subtitle">Portfolio Allocation Matrix</h3>
+        <!-- Holdings table replica for full screen view -->
+        <div class="table-responsive" style="margin-top: 15px;">
+          <table class="tracker-table">
+            <thead>
+              <tr>
+                <th>Asset</th>
+                <th>Company</th>
+                <th>Shares</th>
+                <th>Avg Cost</th>
+                <th>Current Price</th>
+                <th>Market Value</th>
+                <th>Unrealized Gain/Loss</th>
+                <th>Daily Return</th>
+              </tr>
+            </thead>
+            <tbody id="full-holdings-table-body">
+              <!-- Dynamically Populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- Ledger Transaction History View -->
+    <main class="app-content" id="history-view" style="display: none;">
+      <div class="holdings-card">
+        <h3 class="card-subtitle">Trade Ledger / Transaction History</h3>
+        <div class="table-responsive" style="margin-top: 15px;">
+          <table class="tracker-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Asset</th>
+                <th>Action</th>
+                <th>Shares</th>
+                <th>Execution Price</th>
+                <th>Total Value</th>
+                <th>Order Notes</th>
+              </tr>
+            </thead>
+            <tbody id="history-table-body">
+              <!-- Dynamically Populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

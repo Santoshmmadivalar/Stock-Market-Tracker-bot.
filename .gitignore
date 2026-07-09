@@ -1,0 +1,41 @@
+# Python Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+
+# Pytest / Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+cov.xml
+.cache/
+
+# User Data / Databases
+stock_tracker/data/
+data/
+*.db
+*.sqlite
+
+# Environment Configuration
+.env
+.env.*
+!*.example
+
+# Log files
+logs/
+*.log
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
