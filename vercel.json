@@ -1,1 +1,14 @@
 
+{
+  "functions": {
+    "stock_tracker/app.py": {
+      "runtime": "@vercel/python"
+    }
+  },
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "stock_tracker/app.py"
+    }
+  ]
+}
