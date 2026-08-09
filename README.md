@@ -6,6 +6,7 @@ A powerful Discord bot for tracking stock and cryptocurrency prices, managing po
 ## Overview
 
 This Discord bot integrates with financial market APIs to provide real-time data, alerts, and trading functionality directly within Discord channels. It includes modules for stock price tracking, portfolio management, scheduled reports, and cryptocurrency trading.
+---
 
 ### Key Features
 
