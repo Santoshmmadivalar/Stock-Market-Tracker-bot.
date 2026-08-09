@@ -1,5 +1,6 @@
 # Financial Markets Discord Bot
 
+
 A powerful Discord bot for tracking stock and cryptocurrency prices, managing portfolios, setting price alerts, and executing trades across multiple exchanges.
 
 ## Overview
