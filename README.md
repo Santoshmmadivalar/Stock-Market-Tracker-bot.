@@ -214,4 +214,4 @@ This bot is for educational and informational purposes only. Trading cryptocurre
 
 ---
 
-Thank You
+Thank You    |  Star    | Support
