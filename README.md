@@ -213,3 +213,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 This bot is for educational and informational purposes only. Trading cryptocurrencies involves significant risk. Always do your own research before making investment decisions. The creators of this bot are not responsible for any financial losses incurred through its use.
 
 ---
+
+Thank You
